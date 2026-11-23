@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EticaLab · Ética y Deontología en Tecnología Médica</title>
+<style>
+:root{color-scheme:light;--ink:#1d1b33;--muted:#5b5875;--line:#d9d6ea;--page:#f4f3fa;--card:#fff;--deep:#2d2a6e;--accent:#4b44b5;--accent-l:#ebe9fb;--amber:#c98613;--amber-l:#fff4dc;--ok:#1d8a55;--ok-l:#e3f5ec;--bad:#c23a32;--bad-l:#fbe7e5;--shadow:0 2px 10px rgba(30,25,80,.08)}
+*{box-sizing:border-box}[hidden]{display:none!important}
+html,body{margin:0;background:var(--page);color:var(--ink);font:16px/1.5 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif}
+button,input,textarea,select{font:inherit}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+header.top{position:sticky;top:0;z-index:20;background:var(--deep);color:#fff;display:flex;align-items:center;gap:14px;padding:10px 16px;flex-wrap:wrap}
+.brand{font-weight:800;font-size:18px;display:flex;gap:8px;align-items:center}
+.brand .dot{width:28px;height:28px;border-radius:8px;background:var(--amber);display:grid;place-items:center;font-size:15px}
+.who{flex:1;min-width:140px;font-size:14px;opacity:.9}
+.hbtn{background:rgba(255,255,255,.14);color:#fff;border:0;border-radius:999px;padding:5px 12px;font-size:14px;cursor:pointer}
+.clock{font-variant-numeric:tabular-nums;background:rgba(255,255,255,.12);padding:4px 10px;border-radius:999px;font-size:14px}
+.progress{height:6px;background:rgba(255,255,255,.18);width:100%;border-radius:4px;overflow:hidden}.progress>i{display:block;height:100%;background:var(--amber);width:0;transition:width .4s}
+main{max-width:1160px;margin:0 auto;padding:18px 16px 60px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow)}
+h1{font-size:clamp(1.6rem,4vw,2.2rem);margin:0 0 6px;color:var(--deep);line-height:1.15}
+h2{font-size:1.3rem;margin:0 0 10px;color:var(--deep)}h3{font-size:1.05rem;margin:0 0 8px;color:var(--deep)}
+.muted{color:var(--muted)}.small{font-size:.88rem}
+.btn{border:none;border-radius:12px;padding:12px 18px;font-weight:700;background:var(--accent);color:#fff;display:inline-flex;align-items:center;gap:8px;cursor:pointer}
+.btn:hover{filter:brightness(1.08)}.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+.btn.big{padding:14px 24px;font-size:1.05rem}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.between{justify-content:space-between}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:860px){.grid2{grid-template-columns:1fr}}
+.field{display:block;margin-bottom:12px}.field>span{display:block;font-weight:650;font-size:.93rem;margin-bottom:5px}
+.field input,.field textarea,.field select{width:100%;border:1.5px solid #b9b5d6;border-radius:10px;padding:10px 12px;background:#fff;color:var(--ink)}
+.field textarea{resize:vertical;line-height:1.5}
+.field.invalid input,.field.invalid textarea,.field.invalid select{border-color:var(--bad);background:#fffafa}
+.err{color:var(--bad);font-weight:650;font-size:.88rem;margin:4px 0 0}.err:empty{display:none}
+.pill{display:inline-block;border-radius:999px;padding:3px 10px;font-size:.78rem;font-weight:700;background:var(--accent-l);color:var(--accent)}
+.pill.ok{background:var(--ok-l);color:var(--ok)}.pill.warn{background:var(--amber-l);color:#8a5a00}
+.stations{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;margin-top:14px}
+.st{border:1.5px solid var(--line);border-radius:14px;padding:14px;background:#fff;display:flex;flex-direction:column;gap:6px}
+.st.done{border-color:var(--ok);background:var(--ok-l)}.st.next{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-l)}
+.st .ic{font-size:28px}
+.layout{display:grid;grid-template-columns:320px 1fr;gap:16px;align-items:start}
+@media(max-width:900px){.layout{grid-template-columns:1fr}}
+.case{position:sticky;top:76px}@media(max-width:900px){.case{position:static}}
+.scene{background:var(--amber-l);border:1px solid #ecc97a;border-radius:12px;padding:12px;font-size:.95rem;margin:8px 0}
+.checklist{list-style:none;margin:10px 0 0;padding:0;font-size:.86rem}
+.checklist li{display:flex;gap:8px;padding:5px 0;border-bottom:1px solid var(--line);color:var(--muted)}
+.checklist li .m{width:18px;flex:none;text-align:center}
+.checklist li.cur{color:var(--ink);font-weight:700}.checklist li.ok{color:var(--ok)}.checklist li.rt{color:#8a5a00}
+.bar{height:6px;background:var(--line);border-radius:6px;overflow:hidden;margin:6px 0 12px}.bar>i{display:block;height:100%;background:var(--accent)}
+.prompt{font-size:1.12rem;font-weight:700;margin:6px 0 12px}
+.opts{display:grid;gap:10px}
+.opt{border:2px solid var(--line);background:#fff;color:var(--ink);border-radius:12px;padding:12px 14px;text-align:left;cursor:pointer;line-height:1.4}
+.opt:hover:not(:disabled){border-color:var(--accent)}.opt.right{border-color:var(--ok);background:var(--ok-l)}.opt.wrong{border-color:var(--bad);background:var(--bad-l);opacity:.9}.opt.sel{border-color:var(--accent);background:var(--accent-l)}
+.opt:disabled{cursor:default}
+.cls{display:grid;gap:10px}
+.cls .item{border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;background:#fff}
+.cls .item.ok{border-color:var(--ok);background:var(--ok-l)}
+.cls .cats{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.cls .cats button{border:1.5px solid var(--accent);background:#fff;color:var(--accent);border-radius:999px;padding:5px 12px;font-weight:650;cursor:pointer;font-size:.9rem}
+.cls .cats button.wrong{border-color:var(--bad);color:var(--bad);background:var(--bad-l)}
+.cls .cats button.right{border-color:var(--ok);background:var(--ok);color:#fff}
+.cls .why{font-size:.86rem;color:var(--ok);margin-top:6px}
+.feedback{margin-top:14px;border-radius:12px;padding:12px 14px;display:none}
+.feedback.ok{display:block;background:var(--ok-l);border:1.5px solid var(--ok)}.feedback.bad{display:block;background:var(--bad-l);border:1.5px solid var(--bad)}.feedback.info{display:block;background:var(--amber-l);border:1.5px solid #e1b350}
+.feedback .ft{display:block;font-weight:800;margin-bottom:3px}
+.next-row{margin-top:14px;display:flex;justify-content:flex-end;gap:10px}
+.tips{list-style:none;padding:0;margin:8px 0 0;font-size:.9rem}
+.tips li{padding:3px 0}.tips li.ok{color:var(--ok)}.tips li.no{color:#8a5a00}
+.counter{font-size:.82rem;color:var(--muted);text-align:right}
+.overlay{position:fixed;inset:0;background:rgba(20,16,50,.55);display:none;align-items:center;justify-content:center;z-index:50;padding:16px}
+.overlay.on{display:flex}.overlay .card{max-width:780px;width:100%;max-height:90vh;overflow:auto}
+.code dl{margin:0}.code dt{font-weight:800;color:var(--accent);margin-top:10px}.code dd{margin:2px 0 0}
+table.sum{width:100%;border-collapse:collapse;font-size:.93rem}
+table.sum th{text-align:left;color:var(--accent);border-top:2px solid var(--accent);border-bottom:2px solid var(--accent);padding:7px 6px}
+table.sum td{border-bottom:1px solid var(--line);padding:7px 6px;vertical-align:top}
+.video-box{aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden}.video-box video{width:100%;height:100%}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--deep);color:#fff;padding:10px 16px;border-radius:10px;z-index:60;display:none;max-width:92vw}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span class="dot">⚖</span>EticaLab</div>
+  <div class="who" id="who">Ética y Deontología en Tecnología Médica</div>
+  <button class="hbtn" id="codeBtn" type="button">📘 Código (cap. I–IV)</button>
+  <span class="clock" id="clock" hidden></span>
+  <div class="progress" id="prog" hidden><i></i></div>
+</header>
+<main id="app"></main>
+<div class="overlay" id="ov"><div class="card" id="ovc"></div></div>
+<div class="toast" id="toast"></div>
+<script>
+"use strict";
+// ═════════ Contenido: estaciones, código y trabajo final
+const CODE = [
+  ["Art. 2", "Principios fundamentales: la vida, la salud, la libertad, la justicia, la igualdad, el bienestar, la integridad moral, física y psíquica, y la no discriminación."],
+  ["Art. 3", "Valores: honor, lealtad, honestidad, respeto, responsabilidad, solidaridad, puntualidad, veracidad y educación."],
+  ["Art. 4", "Ámbito: se aplica a todo tecnólogo médico, peruano o extranjero, en el territorio nacional y en cualquier actividad o cargo."],
+  ["Art. 5", "Deberes: actuar con dedicación y competencia; actualizarse; conocer las normas; no perjudicar al paciente; atender a todos sin discriminación (inc. f); reconocer errores; ayudar en emergencias; no encubrir el ejercicio deshonesto (inc. m)."],
+  ["Art. 6", "Derechos: los de la Ley 28456 y su reglamento; ejercer con libertad y respeto a su criterio profesional; recibir trato digno."],
+  ["Art. 7", "Funciones: asistencial, docente, de investigación, administración, consultoría, asesoría y otras según su formación."],
+  ["Art. 8", "Acto profesional: participa en diagnóstico, pronóstico y tratamiento sin exceder el ámbito de sus competencias."],
+  ["Arts. 9–11", "Infracciones y sanciones (amonestación, multa, suspensión hasta 2 años, expulsión). La sanción se individualiza según la gravedad, el daño, la reincidencia, la reparación espontánea, el autorreconocimiento y el cargo, entre otros."],
+  ["Art. 12", "Ejercicio ilegal: practicar la profesión sin los requisitos legales del reglamento de la Ley 28456."],
+  ["Art. 14", "Responsabilidad por daños causados por ejercicio negligente, imprudente o imperito."],
+  ["Art. 16", "Para ejercer se requiere título profesional universitario, colegiatura y habilitación en el CTMP."],
+  ["Art. 17", "Deber de certificación periódica y actualización permanente."],
+  ["Art. 18", "Falta grave: proteger o apoyar con la propia firma o título a quien no cumple los requisitos para ejercer."],
+  ["Art. 19", "Obligación de denunciar el ejercicio ilegal de la profesión y a quien lo permita."],
+  ["Art. 20", "Respetar las normas de seguridad ocupacional, higiene, asepsia y antisepsia, y medio ambiente."],
+  ["Art. 22", "Cumplir obligaciones y horario; abstenerse de alcohol, tabaco o estupefacientes en el trabajo y de actos contra la moral."],
+  ["Art. 23", "Atención al paciente con calidad, calidez, comprensión y estricto respeto a su condición de ser humano."],
+  ["Art. 24", "Secreto profesional: confidencialidad de la información del paciente, incluso después de la atención; divulgarla es falta."],
+  ["Art. 25", "Informar riesgos y posibles reacciones adversas; consentimiento informado por escrito para pruebas de riesgo."],
+  ["Art. 26", "Respeto recíproco y fraternidad entre colegas y equipos."],
+  ["Art. 27", "Es falta difamar o insultar a colegas o directivos, también en redes sociales; los reclamos van por conducto regular y con pruebas."],
+  ["Art. 28", "Solidaridad con los colegas que necesiten ayuda."],
+  ["Art. 31", "Fomentar un buen clima laboral."],
+  ["Art. 33", "Evitar juicios negativos que dañen la imagen de colegas o del equipo; tratar con respeto al personal a cargo."],
+  ["Art. 34", "Atención preferencial al colega cuando corresponda, sin vulnerar los derechos de los pacientes."],
+  ["Arts. 35–37", "Respetar a los directivos y las normas del CTMP, acatar sus resoluciones y presentar reclamos de manera alturada y por conducto regular."],
+  ["Art. 39", "Para ser hábil y ejercer legalmente, pagar puntualmente las cuotas del CTMP."],
+  ["Art. 41", "Lealtad al Colegio: discutir los problemas en su seno, sin comentarios que dañen su honorabilidad e imagen."],
+  ["Art. 47", "El emblema del CTMP solo puede usarse con autorización; otras organizaciones únicamente en auspicios autorizados por resolución."],
+  ["Art. 48", "Los directivos deben defender por igual las seis áreas de la Tecnología Médica."],
+  ["Art. 61", "Falta grave: documentación falsa o recursos irregulares para obtener o revalidar un título."],
+];
+const ch = (t, ok, fb) => ({ t, ok: !!ok, fb });
+
+function buildStations(rng) {
+  const pick = (a) => a[Math.floor(rng() * a.length)];
+  const colleague = pick(["Martín", "Diego", "Renzo", "Luis"]);
+  const pac = pick(["Valeria", "Camila", "Fiorella", "Daniela"]);
+  const pat = pick(["Andrés", "Joaquín", "Sebastián", "Bruno"]);
+  const col2 = pick(["Rodrigo", "Gustavo", "Julio", "César"]);
+  return [
+    {
+      id: "fund", icon: "⚖️", unit: "Unidad 1", title: "Antes del turno: fundamentos éticos", est: 12,
+      scene: "Es tu primera semana como tecnólogo médico en el Hospital Santa Rosa (ficticio). Antes de iniciar el turno, la coordinadora reúne al equipo para repasar los fundamentos que guiarán cada decisión del día.",
+      steps: [
+        { type: "classify", check: "Distingue ética, moral y deontología", prompt: "Clasifica cada afirmación según corresponda a la <b>ética</b>, la <b>moral</b> o la <b>deontología</b>.",
+          cats: ["Ética", "Moral", "Deontología"],
+          items: [["En mi comunidad se considera una falta grave no saludar a los mayores.", 1, "Es una norma de costumbre de un grupo: moral."],
+            ["Me pregunto, con argumentos, si es justo atender primero a quien paga más que a quien está más grave.", 0, "Es una reflexión crítica sobre lo correcto: ética."],
+            ["El Código del CTMP obliga a guardar la confidencialidad incluso después de la atención.", 2, "Es un deber profesional codificado: deontología (art. 24)."],
+            ["Mi familia me enseñó que mentir está mal.", 1, "Es una norma aprendida y vivida en el entorno: moral."],
+            ["Analizo si debo respetar la decisión de un paciente que rechaza un examen, aunque yo piense distinto.", 0, "Es un razonamiento sobre el deber ser: ética."],
+            ["Para ejercer se requiere título, colegiatura y habilitación.", 2, "Es un requisito del ejercicio profesional: deontología (art. 16)."]] },
+        { type: "classify", check: "Aplica los principios de la bioética a situaciones reales", prompt: "¿Qué principio de la bioética orienta principalmente cada situación?",
+          cats: ["Autonomía", "Beneficencia", "No maleficencia", "Justicia"],
+          items: [["Solo hay un densitómetro y diez solicitudes: se prioriza con un criterio transparente según la necesidad clínica.", 3, "Distribuir recursos escasos con equidad: justicia."],
+            ["Un paciente, ya informado, decide no continuar con la electroterapia y prefiere solo ejercicios.", 0, "Respetar la decisión informada de la persona: autonomía."],
+            ["Antes de repetir una radiografía, el tecnólogo verifica si es imprescindible para no exponer al paciente sin necesidad.", 2, "Evitar un daño innecesario: no maleficencia."],
+            ["La fisioterapeuta ajusta el programa para que el paciente recupere su independencia al caminar.", 1, "Buscar activamente el bien del paciente: beneficencia."]] },
+        { type: "choice", check: "Reconoce la dignidad y la igualdad de derechos (DUDH y art. 2 del Código)", prompt: "Llega a triaje una mujer extranjera sin documento de identidad, con dolor intenso. Un compañero sugiere: «Que regrese cuando tenga DNI». ¿Qué haces?",
+          opts: [ch("La atiendo con la misma diligencia que a cualquier paciente y gestiono su registro por los canales del establecimiento.", 1, "Correcto: la dignidad y los derechos son iguales para todas las personas (DUDH, art. 1). El Código protege la igualdad y la no discriminación (art. 2) y obliga a atender sin distinción por lugar de nacimiento (art. 5, inc. f) y a ayudar en urgencias (art. 5, inc. h)."),
+            ch("Le pido que regrese con su documento: sin registro no puedo atenderla.", 0, "Una barrera administrativa no puede negar la atención a una persona con dolor intenso; vulnera la igualdad y la no discriminación."),
+            ch("La atiendo al final, después de los pacientes peruanos.", 0, "Postergarla por su nacionalidad es discriminación (art. 5, inc. f).")] },
+        { type: "multi", check: "Identifica los valores del ejercicio profesional (art. 3)", prompt: "Selecciona los valores que el art. 3 del Código reconoce para el ejercicio profesional.",
+          items: [["Honor", 1], ["Veracidad", 1], ["Puntualidad", 1], ["Competitividad", 0], ["Solidaridad", 1], ["Popularidad", 0], ["Lealtad", 1], ["Obediencia sin cuestionar", 0], ["Educación", 1]],
+          okfb: "Correcto. El art. 3 también incluye honestidad, respeto y responsabilidad." },
+        { type: "write", check: "Reflexiona sobre la relación entre ética y deontología", min: 250, rows: 6,
+          prompt: "Reflexión 1. ¿Por qué no basta con conocer el Código (deontología) y también se necesita la reflexión ética? Usa un ejemplo de tu especialidad.",
+          tips: [[/[ée]tic/i, "Menciona explícitamente la ética."], [/c[óo]digo|deber|norma/i, "Relaciónala con el Código o los deberes profesionales."], [/ejemplo|por ejemplo|cuando|caso|paciente/i, "Incluye un ejemplo concreto de tu especialidad."]] },
+      ],
+    },
+    {
+      id: "chat", icon: "💬", unit: "Unidades 2 y 3", title: "Laboratorio: el chat del servicio", est: 15,
+      scene: `21:40 h. En el grupo de WhatsApp del servicio, ${colleague} comparte la foto de un informe con un hallazgo poco frecuente. En la imagen se leen el nombre y el número de historia clínica de la paciente. Escribe: «¡Miren este caso! ¿Alguien la conoce? Vive por mi barrio 😅». Otro colega responde con una broma sobre el aspecto de la paciente.`,
+      steps: [
+        { type: "choice", check: "Actúa ante la vulneración del secreto profesional", prompt: "¿Qué haces primero?",
+          opts: [ch("Pido que se elimine la imagen de inmediato y recuerdo en el grupo que la información de la paciente es confidencial.", 1, "Correcto: el secreto profesional obliga a todos (art. 24), y no actuar sería permitir la falta (art. 5, inc. m)."),
+            ch("La reenvío a mis compañeros de estudio porque es un caso académico interesante.", 0, "Reenviarla multiplica la divulgación: también sería una falta al secreto profesional (art. 24)."),
+            ch("No digo nada: no fui yo quien la publicó.", 0, "Callar permite que la falta continúe; el Código pide no encubrir ni permitir el ejercicio deshonesto (art. 5, inc. m).")] },
+        { type: "multi", check: "Identifica las normas vulneradas", prompt: "¿Qué artículos del Código se vulneraron en el chat? Selecciona todos los que correspondan.",
+          items: [["Art. 24 · Secreto profesional", 1], ["Art. 23 · Atención con respeto a la condición de ser humano (la broma)", 1], ["Art. 16 · Requisitos para ejercer", 0], ["Art. 39 · Pago de cuotas", 0], ["Art. 20 · Seguridad ocupacional", 0]],
+          okfb: "Correcto: se divulgó información confidencial y se faltó el respeto a la dignidad de la paciente." },
+        { type: "choice", check: "Usa la información clínica con fines académicos de forma ética", prompt: "El hallazgo sería útil para una sesión académica. ¿Cómo podría usarse?",
+          opts: [ch("Anonimizado (sin nombre, historia ni datos que permitan identificarla) y con la autorización que exijan las normas del establecimiento.", 1, "Correcto: el fin académico no justifica revelar la identidad."),
+            ch("Con nombre, porque el fin es educativo.", 0, "El fin educativo no elimina el deber de confidencialidad."),
+            ch("Solo si la paciente nunca se entera.", 0, "Que no se entere no lo vuelve ético: el deber existe igual.")] },
+        { type: "choice", check: "Maneja los conflictos entre colegas por el conducto regular", prompt: `Al día siguiente, otro colega publica en Facebook que ${colleague} es «un incompetente y un chismoso». ¿Qué corresponde?`,
+          opts: [ch("Recordar que los reclamos se presentan por el conducto regular y con pruebas; insultar en redes también es falta.", 1, "Correcto: el art. 27 sanciona la difamación o los insultos, incluso en redes sociales, y el art. 33 pide evitar juicios que dañen la imagen de un colega."),
+            ch("Comentar y compartir la publicación: se lo merece.", 0, "Difundir el insulto también daña la reputación de un colega (arts. 27 y 33)."),
+            ch("Crear otro grupo para criticarlo en privado.", 0, "Sigue siendo un daño a su imagen y no resuelve el problema por la vía correcta.")] },
+        { type: "classify", check: "Analiza los factores de la sanción (art. 11)", prompt: "Si el caso llega al Comité de Ética, ¿qué factores del art. 11 atenuarían o agravarían la sanción?",
+          cats: ["Atenúa", "Agrava"],
+          items: [["Borró la foto y se disculpó con la paciente por iniciativa propia.", 0, "Reparación espontánea del daño."], ["Reconoció la falta desde el primer momento.", 0, "Autorreconocimiento de la falta."],
+            ["Había hecho lo mismo el año anterior.", 1, "Reincidencia."], ["Era el jefe del servicio.", 1, "El cargo o la función que desempeña."], ["La imagen llegó a cientos de personas.", 1, "Gravedad del daño causado."]] },
+        { type: "write", check: "Redacta una comunicación firme y respetuosa", min: 140, max: 700, rows: 5,
+          prompt: "Escribe el mensaje que enviarías al grupo: firme, respetuoso y claro sobre lo que debe hacerse.",
+          tips: [[/elimin|borr|retir/i, "Pide eliminar la imagen."], [/confiden|secreto|privac/i, "Menciona la confidencialidad o el secreto profesional."], [/por favor|gracias|equipo|colegas|compañer/i, "Usa un tono respetuoso hacia el equipo."]] },
+      ],
+    },
+    {
+      id: "rx", icon: "🩻", unit: "Unidad 2", title: "Radiología: información, consentimiento y deberes", est: 15,
+      scene: `${pac}, de 27 años, llega para una tomografía de abdomen con contraste. En la ficha, la pregunta sobre embarazo está vacía. Cuando le preguntas, responde: «No sé, creo que no… ¿importa?». Tiene prisa y pide que empiecen ya.`,
+      steps: [
+        { type: "choice", check: "Protege la seguridad de la paciente antes del procedimiento", prompt: "¿Cómo continúas?",
+          opts: [ch("Le explico por qué importa, le pregunto con respeto por su fecha de última menstruación y, si hay duda, coordino con el médico antes de continuar.", 1, "Correcto: proteges a la paciente sin juzgarla y respetas el criterio clínico."),
+            ch("Hago el examen rápido porque ella tiene prisa.", 0, "La prisa no justifica omitir una verificación de seguridad (art. 5, inc. d)."),
+            ch("Marco «no embarazada» para completar la ficha.", 0, "Registrar un dato que no conoces falta a la veracidad (art. 3) y pone en riesgo a la paciente.")] },
+        { type: "choice", check: "Reconoce los deberes del paciente", prompt: `${pac} responde: «Eso es mi vida privada, no tengo por qué decírselo». ¿Qué deber del paciente está en juego y cómo respondes?`,
+          opts: [ch("El deber de brindar información veraz sobre su salud: le explico, sin presionarla, que esa información protege su seguridad y que es confidencial.", 1, "Correcto: el paciente también tiene deberes, y la explicación respetuosa favorece que los cumpla."),
+            ch("Ninguno: los pacientes solo tienen derechos.", 0, "Los pacientes tienen deberes, como dar información veraz y seguir las indicaciones acordadas."),
+            ch("Le digo que, si no responde, la reportaré.", 0, "Amenazar rompe la confianza y no corresponde al buen trato (art. 23).")] },
+        { type: "multi", check: "Identifica los elementos del consentimiento informado (art. 25)", prompt: "Para un consentimiento informado válido en un examen con contraste, ¿qué debe ocurrir?",
+          items: [["Información comprensible sobre el procedimiento, sus beneficios y sus riesgos", 1], ["Oportunidad de preguntar y resolver dudas", 1], ["Decisión libre, sin presiones", 1], ["Registro por escrito cuando existen riesgos", 1], ["Firma obtenida después del examen", 0], ["Firma de un acompañante aunque la paciente pueda decidir", 0]],
+          okfb: "Correcto: informar, comprender, decidir libremente y registrar por escrito las pruebas de riesgo (art. 25)." },
+        { type: "choice", check: "Respeta la autonomía ante una negativa informada", prompt: `Tras tu explicación, ${pac} decide no hacerse el examen hoy.`,
+          opts: [ch("Respeto su decisión, le explico las consecuencias, registro su negativa según el procedimiento del servicio e informo al médico solicitante.", 1, "Correcto: la persona usuaria puede negarse a un procedimiento; se documenta y se comunica."),
+            ch("La convenzo diciéndole que no tiene ningún riesgo.", 0, "Minimizar los riesgos para convencerla vicia el consentimiento (art. 25) y falta a la veracidad."),
+            ch("Lo hago igual porque el médico lo ordenó.", 0, "La orden médica no reemplaza el consentimiento de la paciente.")] },
+        { type: "write", check: "Explica el procedimiento en lenguaje claro", min: 250, rows: 6,
+          prompt: `Escribe cómo le explicarías a ${pac}, con palabras sencillas, en qué consiste el examen, por qué preguntas por el embarazo y qué riesgos tiene (4 a 6 líneas, como si le hablaras).`,
+          tips: [[/riesg/i, "Menciona los riesgos."], [/pregunt|duda|consult/i, "Invítala a preguntar o resolver dudas."], [/^(?![\s\S]*(nefrotox|teratog|iatrog|extravas))/i, "Evita términos técnicos (por ejemplo, «nefrotoxicidad»); usa palabras cotidianas."]] },
+      ],
+    },
+    {
+      id: "tf", icon: "🤝", unit: "Unidades 2 y 3", title: "Terapia física: buen trato, comunicación e inclusión", est: 15,
+      scene: `${pat}, de 24 años, tiene síndrome de Down y llega con su hermana a su primera sesión por un esguince de tobillo. Esperaron 40 minutos por un retraso del servicio y la hermana está molesta. El colega que los recibió le dijo a ella: «Usted firme aquí; le explico todo a usted, total él no va a entender».`,
+      steps: [
+        { type: "choice", check: "Inicia la atención con buen trato y centrada en la persona", prompt: "Te toca atenderlos. ¿Cómo empiezas?",
+          opts: [ch(`Me disculpo por la espera, me presento por mi nombre y me dirijo a ${pat}, mirándolo y con frases cortas, incluyendo a su hermana como apoyo.`, 1, "Correcto: calidad, calidez y respeto a su condición de ser humano (art. 23)."),
+            ch("Le explico todo a la hermana, porque ella firma.", 0, "Ignorar al paciente vulnera su dignidad y su derecho a participar en las decisiones sobre su salud."),
+            ch("Empiezo el ejercicio sin presentarme para recuperar el tiempo perdido.", 0, "La prisa no justifica omitir la presentación ni la explicación.")] },
+        { type: "choice", check: "Reconoce la capacidad de decisión de la persona con discapacidad", prompt: `${pat} es mayor de edad. ¿Quién decide sobre su tratamiento?`,
+          opts: [ch(`${pat}, con los apoyos que necesite: su hermana puede ayudarle a comprender, pero la decisión es de él.`, 1, "Correcto: la normativa peruana reconoce la capacidad jurídica de las personas con discapacidad, con apoyos cuando los requieren."),
+            ch("Su hermana, porque él tiene discapacidad intelectual.", 0, "La discapacidad no elimina su capacidad de decidir; se le brindan apoyos."),
+            ch("El fisioterapeuta, porque es el profesional.", 0, "El criterio profesional orienta, pero no reemplaza la decisión del paciente.")] },
+        { type: "multi", check: "Aplica los factores que mejoran la comunicación y la confianza", prompt: `¿Qué acciones generan confianza y mejoran la comunicación con ${pat}? Selecciona todas las correctas.`,
+          items: [["Usar frases cortas, con una idea a la vez", 1], ["Mostrar el ejercicio antes de pedirlo", 1], ["Comprobar que entendió pidiéndole que lo muestre o lo explique", 1], ["Tono amable y paciencia", 1], ["Hablarle como a un niño pequeño", 0], ["Usar términos técnicos para dar seguridad", 0], ["Hablarle más fuerte", 0]],
+          okfb: "Correcto: claridad, demostración, verificación y calidez, sin infantilizar." },
+        { type: "choice", check: "Responde a un reclamo con escucha y buen trato", prompt: "La hermana dice: «Siempre es lo mismo, aquí nadie respeta nuestro tiempo». ¿Cómo respondes?",
+          opts: [ch("La escucho sin interrumpir, reconozco su molestia, me disculpo, explico cómo empezaremos ahora y le informo cómo presentar un reclamo si lo desea.", 1, "Correcto: la escucha y el reconocimiento recuperan la confianza; reclamar es un derecho de las personas usuarias."),
+            ch("Le digo que la demora no es mi culpa.", 0, "Defenderte aumenta el conflicto y no resuelve su necesidad."),
+            ch("Ignoro el comentario y empiezo.", 0, "Ignorar la queja deteriora la relación terapéutica.")] },
+        { type: "choice", check: "Aborda la conducta de un colega con respeto", prompt: "¿Qué haces respecto a lo que dijo tu colega?",
+          opts: [ch("Converso con él en privado y con respeto sobre el trato inclusivo, sin desacreditarlo frente a los pacientes.", 1, "Correcto: corriges la conducta (arts. 5, inc. f, y 23) cuidando la imagen del colega (art. 33)."),
+            ch("Lo corrijo delante de la familia para que aprenda.", 0, "Exponerlo frente a los pacientes daña su imagen (art. 33) y no mejora la atención."),
+            ch("No digo nada.", 0, "Callar permite que el trato discriminatorio se repita.")] },
+        { type: "write", check: "Comunica en lectura fácil", min: 150, rows: 5,
+          prompt: `Escribe 3 o 4 frases en lectura fácil para explicarle a ${pat} el ejercicio de hoy (frases cortas, palabras de uso diario).`,
+          tips: [[/^(?![\s\S]*(propiocep|dorsiflex|isom[ée]tric|ligament|inversi[óo]n))/i, "Evita términos técnicos (propiocepción, dorsiflexión…)."], [{ test: (t) => { const s = t.split(/[.!?¡¿\n]+/).filter((x) => x.trim()); return s.length >= 3 && s.every((x) => x.trim().split(/\s+/).length <= 16); } }, "Usa al menos 3 frases de 16 palabras o menos."]] },
+      ],
+    },
+    {
+      id: "col", icon: "🏛️", unit: "Unidad 4 · Código cap. I y IV", title: "Gestión: el colega no habilitado y el Colegio", est: 15,
+      scene: `Trabajas en una clínica privada. ${col2}, un colega con experiencia, no está habilitado: tiene cuotas impagas en el CTMP desde hace meses. La administradora te pide que firmes con tu sello los informes que él realiza «mientras se pone al día». Además, ${col2} publicó en Facebook insultos contra el decano del Colegio.`,
+      steps: [
+        { type: "choice", check: "Se niega a amparar con su firma un ejercicio sin requisitos (art. 18)", prompt: "¿Firmas los informes?",
+          opts: [ch("No: no firmo procedimientos que no realicé ni supervisé; amparar con mi firma a quien no cumple los requisitos es falta grave.", 1, "Correcto: el art. 18 sanciona proteger o apoyar con la firma o el título el ejercicio de quien no cumple los requisitos."),
+            ch(`Sí, porque ${col2} sí tiene título.`, 0, "El título no basta: también se requiere colegiatura y habilitación (art. 16)."),
+            ch("Solo firmo los informes de los pacientes que conozco.", 0, "Firmar lo que no hiciste falta a la veracidad y ampara el ejercicio irregular.")] },
+        { type: "multi", check: "Identifica los requisitos para ejercer (arts. 16 y 39)", prompt: `¿Qué necesita ${col2} para ejercer legalmente?`,
+          items: [["Título profesional universitario", 1], ["Colegiatura en el CTMP", 1], ["Habilitación vigente (cuotas al día)", 1], ["Diez años de experiencia", 0], ["Autorización verbal de la administración", 0], ["Certificado de un curso corto", 0]],
+          okfb: "Correcto: título, colegiatura y habilitación (art. 16); la condición de hábil exige estar al día en las cuotas (art. 39)." },
+        { type: "choice", check: "Combina solidaridad y protección del paciente", prompt: `¿Cómo actúas con ${col2}?`,
+          opts: [ch("Le hablo con respeto, lo oriento para regularizar su habilitación y propongo a la administración reorganizar la agenda con profesionales habilitados mientras tanto.", 1, "Correcto: solidaridad con el colega (art. 28) sin poner en riesgo a los pacientes."),
+            ch("Lo expongo en el grupo de la clínica para que todos sepan.", 0, "Exponerlo daña su imagen (art. 33) y no resuelve el problema."),
+            ch("No hago nada: es su problema.", 0, "Mientras atiende sin habilitación, el problema también es de los pacientes y del servicio.")] },
+        { type: "choice", check: "Cumple el deber de denunciar el ejercicio ilegal (art. 19)", prompt: `La administración insiste en que ${col2} siga atendiendo solo. ¿Qué corresponde?`,
+          opts: [ch("Comunicar formalmente la situación por los canales correspondientes: quien conoce un ejercicio sin requisitos tiene la obligación de denunciarlo.", 1, "Correcto: art. 19 (y art. 12 sobre ejercicio ilegal)."),
+            ch("Aceptarlo, porque la clínica es privada.", 0, "Los requisitos rigen en el ejercicio público y privado (art. 16)."),
+            ch("Renunciar sin decir nada.", 0, "Irte sin comunicarlo no protege a los pacientes ni cumple el art. 19.")] },
+        { type: "choice", check: "Canaliza los reclamos al Colegio de forma alturada (arts. 37 y 41)", prompt: `Sobre la publicación de ${col2} contra el decano:`,
+          opts: [ch("Los reclamos al Colegio se presentan de manera alturada y por conducto regular; los insultos públicos dañan la imagen de la institución.", 1, "Correcto: arts. 37 y 41 (y art. 27 sobre insultos a directivos)."),
+            ch("Es libertad de expresión: no existe ningún deber al respecto.", 0, "Se puede discrepar, pero el Código exige hacerlo con respeto y por los canales del Colegio."),
+            ch("Comento apoyándolo para que tenga más alcance.", 0, "Amplificar el insulto también daña la imagen del Colegio.")] },
+        { type: "choice", check: "Reconoce el uso indebido del emblema del CTMP (art. 47)", prompt: "La clínica imprime volantes con el emblema del CTMP para promocionar sus servicios.",
+          opts: [ch("No está permitido sin autorización del Colegio mediante resolución: hay que retirarlo.", 1, "Correcto: el emblema solo puede usarse con autorización (art. 47)."),
+            ch("Está bien, porque allí trabajan tecnólogos médicos.", 0, "Contar con tecnólogos médicos no autoriza a usar el emblema."),
+            ch("Está bien si el logo es pequeño.", 0, "El tamaño no cambia la falta de autorización.")] },
+        { type: "write", check: "Redacta un informe con norma y propuesta", min: 300, rows: 7,
+          prompt: "Redacta un breve informe para la administración (5 a 7 líneas): describe la situación, cita la norma aplicable y presenta tu propuesta.",
+          tips: [[/art[íi]?c?u?l?o?\.?\s*(16|18|19|39)/i, "Cita al menos uno de los arts. 16, 18, 19 o 39."], [/propon|propuesta|sugier|recomiend/i, "Incluye una propuesta concreta."], [/pacient/i, "Explica cómo se protege a los pacientes."]] },
+      ],
+    },
+    {
+      id: "id", icon: "🧭", unit: "Unidad 4", title: "Identidad, competencias y liderazgo", est: 12,
+      scene: "Al cerrar la semana, participas en la inducción de los internos del servicio. Te piden hablar de la identidad profesional, de los límites de tu acto profesional y del liderazgo.",
+      steps: [
+        { type: "multi", check: "Reconoce las seis áreas de la Tecnología Médica", prompt: "El Código (art. 48) menciona seis áreas que integran la Tecnología Médica. Selecciónalas.",
+          items: [["Laboratorio Clínico y Anatomía Patológica", 1], ["Terapia Física y Rehabilitación", 1], ["Radiología", 1], ["Enfermería", 0], ["Terapia Ocupacional", 1], ["Terapia de Lenguaje", 1], ["Nutrición", 0], ["Optometría", 1], ["Obstetricia", 0]],
+          okfb: "Correcto: las seis áreas forman una sola profesión y los directivos deben defenderlas por igual (art. 48)." },
+        { type: "choice", check: "Identifica las funciones del ejercicio profesional (art. 7)", prompt: "Además de la función asistencial, ¿qué funciones reconoce el art. 7?",
+          opts: [ch("Docencia, investigación, administración, consultoría y asesoría, entre otras.", 1, "Correcto."), ch("Ninguna: el tecnólogo médico solo realiza procedimientos.", 0, "El art. 7 reconoce varias funciones además de la asistencial."), ch("Prescribir cualquier tratamiento médico.", 0, "El acto profesional no debe exceder sus competencias (art. 8).")] },
+        { type: "choice", check: "Respeta los límites del acto profesional (art. 8)", prompt: "Mientras realizas una radiografía, el paciente te pregunta: «Usted que ya vio la imagen, ¿es cáncer?».",
+          opts: [ch("Le explico con amabilidad que la interpretación diagnóstica la hace el médico especialista y le digo cuándo y cómo recibirá su informe.", 1, "Correcto: no excedes tus competencias (art. 8) y cuidas el trato (art. 23)."),
+            ch("Le doy mi opinión para tranquilizarlo.", 0, "Opinar sobre un diagnóstico que no te corresponde puede causar daño y excede tus competencias."),
+            ch("Le digo que no puedo hablar con pacientes.", 0, "Sí puedes y debes comunicarte con amabilidad; lo que no corresponde es dar el diagnóstico.")] },
+        { type: "choice", check: "Ejerce un liderazgo profesional participativo", prompt: "Se implementará un nuevo protocolo de bioseguridad y algunos colegas se resisten. Como coordinador, ¿qué haces?",
+          opts: [ch("Escucho sus razones, explico el sustento (art. 20), acordamos una implementación por etapas y doy el ejemplo.", 1, "Correcto: un liderazgo que comunica, involucra y es coherente."),
+            ch("Lo impongo y sanciono a quien no lo cumpla desde el primer día.", 0, "Imponer sin escuchar genera más resistencia y deteriora el clima laboral (art. 31)."),
+            ch("Lo dejo opcional para evitar conflictos.", 0, "La bioseguridad no es opcional (art. 20).")] },
+        { type: "write", check: "Reflexiona sobre la identidad y el futuro de la profesión", min: 350, rows: 8,
+          prompt: "Escribe una carta breve a un estudiante de primer ciclo (6 a 8 líneas): ¿por qué vale la pena ser tecnólogo médico?, ¿qué desafíos tiene hoy la profesión? y ¿qué valores le pedirías cuidar?",
+          tips: [[/valor|honest|respeto|responsab|veracidad|solidar/i, "Menciona al menos un valor."], [/desaf|reto|futuro|tecnolog/i, "Menciona un desafío o el futuro de la profesión."], [/pacient|persona|comunidad/i, "Relaciona tu carta con las personas que atendemos."]] },
+      ],
+    },
+  ];
+}
+
+// ═════════ EticaLab · motor
+const CONFIG = {
+  curso: "Ética y Deontología en Tecnología Médica",
+  codigoCurso: "24UC00438",
+  institucion: "Universidad Continental",
+  docente: "Mg. Sergio Bravo Cucci",
+  videoFile: "", // p. ej. "etica_docente.mp4" en la misma carpeta
+  maxMin: 100,
+};
+const KEY = "eticalab_v1";
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const esc = (t) => String(t ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const strip = (h) => String(h).replace(/<[^>]+>/g, "");
+const norm = (s) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/\s+/g, " ").trim();
+function hashStr(s) { let h = 2166136261 >>> 0; for (const c of s) { h ^= c.codePointAt(0); h = Math.imul(h, 16777619) >>> 0; } return h >>> 0; }
+function mulberry32(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function shuffle(rng, a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rng() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+const fmtT = (ms) => new Date(ms).toLocaleTimeString("es-PE", { hour: "2-digit", minute: "2-digit" });
+const fmtDur = (ms) => `${Math.floor(ms / 60000)} min ${String(Math.floor(ms % 60000 / 1000)).padStart(2, "0")} s`;
+let S = null, ST = null, KEYH = null;
+function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { } }
+function load() { try { return JSON.parse(localStorage.getItem(KEY) || "null"); } catch (e) { return null; } }
+function log(m) { if (S) { S.log.push({ t: Date.now(), m }); save(); } }
+function toast(t) { const el = $("#toast"); el.textContent = t; el.style.display = "block"; clearTimeout(toast.t); toast.t = setTimeout(() => (el.style.display = "none"), 2600); }
+function stations() {
+  if (ST) return ST;
+  const rng = mulberry32(S.seed);
+  ST = buildStations(rng);
+  const r2 = mulberry32((S.seed ^ 0x9e3779b9) >>> 0);
+  ST.forEach((st) => st.steps.forEach((s) => { if (s.opts) s.opts = shuffle(r2, s.opts); if (s.items && s.type === "classify") s.items = shuffle(r2, s.items); if (s.items && s.type === "multi") s.items = shuffle(r2, s.items); }));
+  return ST;
+}
+const isDone = (i) => !!(S.res[i] && S.res[i].end);
+function score(r) { if (!r) return { n: 0, first: 0, err: 0, pct: 0 }; const n = r.steps.length, first = r.steps.filter((x) => x.ok && !x.err).length; return { n, first, err: r.steps.reduce((a, x) => a + x.err, 0), pct: n ? Math.round(first / n * 100) : 0 }; }
+function header() {
+  $("#who").textContent = S && S.start ? `${S.name} · ${S.code}` : `${CONFIG.curso}`;
+  $("#clock").hidden = !(S && S.start); $("#prog").hidden = !(S && S.start);
+  if (S && S.start) { const n = stations().length + 1, d = stations().filter((_, i) => isDone(i)).length + (S.workDone ? 1 : 0); $("#prog").firstElementChild.style.width = `${d / n * 100}%`; tick(); }
+}
+function tick() { if (!S || !S.start) return; const el = (S.end || Date.now()) - S.start; $("#clock").textContent = `⏱ ${String(Math.floor(el / 60000)).padStart(2, "0")}:${String(Math.floor(el / 1000) % 60).padStart(2, "0")}`; }
+setInterval(tick, 1000);
+function openOv(h) { $("#ovc").innerHTML = h; $("#ov").classList.add("on"); }
+function closeOv() { $("#ov").classList.remove("on"); $("#ovc").innerHTML = ""; }
+$("#ov").addEventListener("click", (e) => { if (e.target.id === "ov") closeOv(); });
+$("#codeBtn").onclick = () => { openOv(`<div class="code"><div class="row between"><h2 style="margin:0">📘 Código de Ética del CTMP · síntesis (cap. I–IV)</h2><button class="btn ghost" id="cx">Cerrar</button></div><p class="small muted">Resumen de apoyo para la práctica (versión del 12/08/2026). Ante cualquier duda, consulta el texto completo del Código.</p><dl>${CODE.map(([a, t]) => `<dt>${a}</dt><dd>${esc(t)}</dd>`).join("")}</dl></div>`); $("#cx").onclick = closeOv; };
+
+// ═════ inicio
+function renderHome() {
+  KEYH = null; header();
+  const saved = load();
+  const vid = CONFIG.videoFile ? `<div class="card" style="background:var(--accent-l)"><h3>🎬 Mensaje del docente</h3><div class="video-box"><video controls playsinline preload="metadata" src="${esc(CONFIG.videoFile)}"></video></div></div>` : "";
+  $("#app").innerHTML = `<div class="grid2" style="align-items:start">
+    <div class="card">
+      <p class="pill">${esc(CONFIG.curso)} · Trabajo individual de cierre</p>
+      <h1 style="margin-top:10px">Un turno en el Hospital Santa Rosa: decisiones éticas paso a paso</h1>
+      <p class="muted">Vivirás seis situaciones de la práctica profesional del tecnólogo médico. En cada una decidirás, fundamentarás con el Código de Ética y escribirás tu reflexión. Al final elaborarás tu trabajo y descargarás el PDF para entregarlo.</p>
+      ${saved && saved.start && !saved.end ? `<div class="feedback info"><span class="ft">Tienes un trabajo en curso</span>${esc(saved.name)} · ${esc(saved.code)}<div class="row" style="margin-top:8px"><button class="btn" id="resume">Continuar</button><button class="btn ghost" id="discard">Empezar de nuevo</button></div></div>` : ""}
+      <label class="field" data-f="nm"><span>Nombres y apellidos</span><input id="nm" autocomplete="name"><p class="err"></p></label>
+      <label class="field" data-f="cd"><span>Código de estudiante</span><input id="cd"><p class="err"></p></label>
+      <label class="small" style="display:flex;gap:8px;align-items:flex-start;margin:4px 0 12px" data-f="hon"><input type="checkbox" id="hon" style="margin-top:4px"> Declaro que realizaré este trabajo de forma individual, con mis propias palabras.</label>
+      <p class="err" id="honErr"></p>
+      <button class="btn big" id="go">Comenzar →</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:16px">${vid}
+      <div class="card"><h3>¿Cómo funciona?</h3><ol class="small" style="padding-left:18px;margin:0">
+        <li><b>Lee la escena</b> de cada estación.</li>
+        <li><b>Decide</b>: si te equivocas, recibes una explicación y vuelves a intentar.</li>
+        <li><b>Fundamenta</b> con el Código (botón «📘 Código» arriba).</li>
+        <li><b>Escribe</b> las reflexiones con tus propias palabras.</li>
+        <li><b>Elabora tu trabajo final</b> y descarga el PDF para subirlo al aula virtual.</li></ol>
+        <p class="small muted" style="margin-bottom:0">Duración estimada: 90 minutos. El avance se guarda en este navegador.</p></div>
+      <div class="card"><h3>Unidades que repasarás</h3><p class="small" style="margin:0">1 · Ética, moral, deontología, bioética, valores y derechos humanos<br>2 · Código de Ética del CTMP (cap. I–IV), derechos y deberes del paciente, discapacidad<br>3 · Relación tecnólogo médico–paciente: confianza, buen trato y comunicación<br>4 · Ejercicio legal, identidad profesional y liderazgo</p></div>
+    </div></div>`;
+  const err = (f, m) => { const w = $(`[data-f="${f}"]`); w.classList.add("invalid"); w.querySelector(".err").textContent = m; w.querySelector("input").focus(); };
+  $("#go").onclick = () => {
+    $$(".invalid").forEach((w) => w.classList.remove("invalid")); $$(".err").forEach((e) => (e.textContent = ""));
+    const name = $("#nm").value.trim().replace(/\s+/g, " "), code = $("#cd").value.trim();
+    if (name.split(" ").length < 2) return err("nm", "Escribe tus nombres y apellidos.");
+    if (code.length < 3) return err("cd", "Escribe tu código de estudiante.");
+    if (!$("#hon").checked) { $("#honErr").textContent = "Marca la declaración para continuar."; $("#hon").focus(); return; }
+    S = { name, code, seed: hashStr(norm(name) + "|" + norm(code)), start: Date.now(), end: null, cur: 0, step: 0, res: {}, work: {}, workDone: false, log: [] };
+    ST = null; log("Inicio del trabajo"); renderMap();
+  };
+  if ($("#resume")) $("#resume").onclick = () => { S = saved; ST = null; log("Reanuda el trabajo"); renderMap(); };
+  if ($("#discard")) $("#discard").onclick = () => { try { localStorage.removeItem(KEY); } catch (e) { } renderHome(); };
+}
+
+// ═════ recorrido
+function renderMap() {
+  KEYH = null; header(); window.scrollTo(0, 0);
+  const sts = stations(), next = sts.findIndex((_, i) => !isDone(i));
+  $("#app").innerHTML = `<div class="card"><div class="row between"><div><h1>Tu turno</h1><p class="muted" style="margin:0">${esc(S.name)} · ${esc(S.code)}</p></div>
+    ${next >= 0 ? `<button class="btn big" id="go">${S.res[next] ? "Continuar" : "Iniciar"}: estación ${next + 1} →</button>` : `<button class="btn big" id="go">Elaborar mi trabajo final →</button>`}</div>
+    <div class="stations">${sts.map((st, i) => { const d = isDone(i), sc = score(S.res[i]); return `<div class="st ${d ? "done" : i === next ? "next" : ""}"><div class="row between"><span class="ic">${st.icon}</span><span class="small muted">Estación ${i + 1}</span></div><b>${esc(st.title)}</b><span class="small muted">${esc(st.unit)} · ≈ ${st.est} min</span><div style="margin-top:auto">${d ? `<span class="pill ok">✓ ${sc.first}/${sc.n} al primer intento</span>` : S.res[i] ? `<span class="pill warn">En curso</span>` : ""}</div></div>`; }).join("")}
+      <div class="st ${S.workDone ? "done" : next < 0 ? "next" : ""}"><div class="row between"><span class="ic">📝</span><span class="small muted">Cierre</span></div><b>Trabajo final individual</b><span class="small muted">Análisis de caso, compromisos y conclusión · ≈ 20 min</span><div style="margin-top:auto">${S.workDone ? `<span class="pill ok">✓ PDF generado</span>` : ""}</div></div></div></div>`;
+  $("#go").onclick = () => { if (next >= 0) { S.cur = next; if (!S.res[next]) S.step = 0; save(); renderStation(); } else renderWork(); };
+}
+
+// ═════ estación
+function renderStation() {
+  KEYH = null; header();
+  const i = S.cur, st = stations()[i];
+  let r = S.res[i]; if (!r) { r = S.res[i] = { start: Date.now(), end: null, steps: [] }; S.step = 0; log(`Inicia estación ${i + 1}: ${st.title}`); }
+  if (S.step >= st.steps.length) return finishStation(i);
+  const k = S.step, step = st.steps[k], rec = r.steps[k] || (r.steps[k] = { check: step.check, err: 0, ok: false, val: "" });
+  $("#app").innerHTML = `<div class="layout">
+    <aside class="card case"><div class="row between"><span class="pill">${esc(st.unit)}</span><button class="btn ghost" id="back" style="padding:6px 10px;font-size:13px">← Turno</button></div>
+      <h3 style="margin-top:10px">${st.icon} Estación ${i + 1}: ${esc(st.title)}</h3><div class="scene">${esc(st.scene)}</div>
+      <div class="small muted" style="font-weight:700">Lista de logros</div>
+      <ul class="checklist">${st.steps.map((s, j) => { const x = r.steps[j]; const c = j === k ? "cur" : x && x.ok ? (x.err ? "rt" : "ok") : ""; return `<li class="${c}"><span class="m">${x && x.ok ? (x.err ? "↺" : "✓") : j === k ? "▸" : "○"}</span><span>${esc(s.check)}</span></li>`; }).join("")}</ul></aside>
+    <section class="card"><div class="row between"><span class="pill">Paso ${k + 1} de ${st.steps.length}</span><span class="small muted">${esc(step.check)}</span></div>
+      <div class="bar"><i style="width:${k / st.steps.length * 100}%"></i></div>
+      <div class="prompt">${step.prompt}</div><div id="area"></div><div class="feedback" id="fb"></div>
+      <div class="next-row"><button class="btn big" id="next" hidden>Continuar →</button></div></section></div>`;
+  $("#back").onclick = renderMap;
+  const fb = (cls, t, m) => { const f = $("#fb"); f.className = "feedback " + cls; f.innerHTML = `<span class="ft">${t}</span>${m}`; };
+  const api = {
+    ok(m, val) { rec.ok = true; if (val != null) rec.val = val; save(); log(`${rec.err ? "↺" : "✓"} E${i + 1} · ${step.check}`); fb("ok", rec.err ? "Logrado tras la retroalimentación" : "¡Correcto!", m); $("#next").hidden = false; $("#next").focus({ preventScroll: true }); },
+    bad(m) { rec.err++; save(); log(`✗ E${i + 1} · ${step.check}: ${strip(m).slice(0, 120)}`); fb("bad", "Revisa", m); },
+    info(m) { fb("info", "Sugerencias", m); },
+  };
+  $("#next").onclick = () => { S.step++; save(); renderStation(); window.scrollTo({ top: 0, behavior: "smooth" }); };
+  if (rec.ok) { $("#area").innerHTML = step.type === "write" ? `<p class="small muted">Tu respuesta:</p><p>${esc(rec.val)}</p>` : `<p class="muted">Paso completado.</p>`; $("#next").hidden = false; }
+  else TYPES[step.type](step, $("#area"), api, rec);
+}
+function finishStation(i) {
+  const r = S.res[i]; if (!r.end) { r.end = Date.now(); const s = score(r); log(`Termina estación ${i + 1} · ${s.first}/${s.n} al primer intento`); }
+  save(); const s = score(r);
+  openOv(`<div style="text-align:center"><div style="font-size:48px">${s.pct >= 80 ? "🏅" : "✅"}</div><h2>Estación completada</h2><p>${esc(stations()[i].title)}</p><p><span class="pill ok">${s.first} de ${s.n} logros al primer intento</span></p><button class="btn big" id="ovok">Continuar el turno →</button></div>`);
+  $("#ovok").onclick = () => { closeOv(); renderMap(); };
+}
+const TYPES = {
+  choice(s, area, api) {
+    area.innerHTML = `<div class="opts">${s.opts.map((o, i) => `<button class="opt" data-i="${i}">${esc(o.t)}</button>`).join("")}</div>`;
+    $$(".opt", area).forEach((b) => (b.onclick = () => { const o = s.opts[+b.dataset.i]; if (o.ok) { b.classList.add("right"); $$(".opt", area).forEach((x) => (x.disabled = true)); api.ok(esc(o.fb), o.t); } else { b.classList.add("wrong"); b.disabled = true; api.bad(esc(o.fb)); } }));
+  },
+  multi(s, area, api) {
+    const sel = new Set();
+    area.innerHTML = `<p class="small muted" style="margin-top:0">Selecciona todas las que correspondan y luego verifica.</p><div class="opts">${s.items.map(([t], i) => `<button class="opt" data-i="${i}" aria-pressed="false">☐ ${esc(t)}</button>`).join("")}</div><div class="row" style="margin-top:12px"><button class="btn" id="mv">Verificar</button></div>`;
+    $$(".opt", area).forEach((b) => (b.onclick = () => { const i = +b.dataset.i; sel.has(i) ? sel.delete(i) : sel.add(i); const on = sel.has(i); b.classList.toggle("sel", on); b.classList.remove("wrong", "right"); b.setAttribute("aria-pressed", on); b.textContent = `${on ? "☑" : "☐"} ${s.items[i][0]}`; }));
+    $("#mv").onclick = () => {
+      const miss = s.items.filter((it, i) => it[1] && !sel.has(i)).length, extra = s.items.filter((it, i) => !it[1] && sel.has(i));
+      $$(".opt", area).forEach((b) => { const i = +b.dataset.i; if (sel.has(i)) b.classList.add(s.items[i][1] ? "right" : "wrong"); });
+      if (!miss && !extra.length) { $$(".opt", area).forEach((b) => (b.disabled = true)); $("#mv").disabled = true; api.ok(esc(s.okfb), s.items.filter((x) => x[1]).map((x) => x[0]).join("; ")); }
+      else api.bad(`${miss ? `Te falta seleccionar ${miss} opción(es) correcta(s). ` : ""}${extra.length ? `No corresponde: <b>${extra.map((x) => esc(x[0])).join("</b>, <b>")}</b>.` : ""} Ajusta y vuelve a verificar.`);
+    };
+  },
+  classify(s, area, api) {
+    let done = 0;
+    area.innerHTML = `<div class="cls">${s.items.map(([t], i) => `<div class="item" data-i="${i}"><div>${esc(t)}</div><div class="cats">${s.cats.map((c, k) => `<button data-k="${k}">${esc(c)}</button>`).join("")}</div><div class="why" hidden></div></div>`).join("")}</div>`;
+    $$(".item", area).forEach((it) => $$(".cats button", it).forEach((b) => (b.onclick = () => {
+      const i = +it.dataset.i, k = +b.dataset.k, [, right, why] = s.items[i];
+      if (it.classList.contains("ok")) return;
+      if (k === right) { b.classList.add("right"); it.classList.add("ok"); $$(".cats button", it).forEach((x) => (x.disabled = true)); const w = $(".why", it); w.hidden = false; w.textContent = "✓ " + why; done++; if (done === s.items.length) api.ok("Clasificaste correctamente todas las situaciones.", `${s.items.length} elementos`); }
+      else { b.classList.add("wrong"); b.disabled = true; api.bad(`«${esc(s.cats[k])}» no corresponde a: «${esc(s.items[i][0].slice(0, 80))}…». Vuelve a intentarlo.`); }
+    })));
+  },
+  write(s, area, api, rec) {
+    const draft = rec.draft || "";
+    area.innerHTML = `<label class="field"><span class="sr" style="position:absolute;left:-9999px">Tu respuesta</span><textarea id="wt" rows="${s.rows || 6}" maxlength="${s.max || 2000}" placeholder="Escribe aquí con tus propias palabras…">${esc(draft)}</textarea></label>
+      <div class="counter" id="wc"></div><ul class="tips" id="wtips"></ul><div class="row" style="margin-top:10px"><button class="btn" id="wsave">Guardar respuesta</button></div>`;
+    const t = $("#wt");
+    const upd = () => { const v = t.value; rec.draft = v; save(); $("#wc").textContent = `${v.trim().length} / mínimo ${s.min} caracteres`; $("#wtips").innerHTML = s.tips.map(([re, m]) => { const ok = re.test(v); return `<li class="${ok ? "ok" : "no"}">${ok ? "✓" : "○"} ${esc(m)}</li>`; }).join(""); };
+    t.addEventListener("input", upd); upd();
+    let warned = false;
+    $("#wsave").onclick = () => {
+      const v = t.value.trim();
+      if (v.length < s.min) { api.info(`Tu respuesta tiene ${v.length} caracteres. Desarrolla un poco más tu idea (mínimo ${s.min}).`); t.focus(); return; }
+      const pend = s.tips.filter(([re]) => !re.test(v));
+      if (pend.length && !warned) { warned = true; api.info(`Puedes mejorar tu respuesta:<br>• ${pend.map(([, m]) => esc(m)).join("<br>• ")}<br><br>Si ya lo consideraste, pulsa «Guardar respuesta» otra vez.`); return; }
+      t.readOnly = true; $("#wsave").disabled = true; rec.tipsOk = s.tips.length - pend.length; rec.tipsN = s.tips.length;
+      api.ok("Respuesta guardada. Formará parte de tu trabajo final.", v);
+    };
+  },
+};
+
+// ═════ trabajo final
+const WF = [
+  { k: "titulo", lab: "Título de tu trabajo", min: 10, rows: 1, def: "La ética como base de mi práctica como tecnólogo médico" },
+  { k: "intro", lab: "1. Introducción: ¿qué significa para ti actuar con ética y deontología como tecnólogo médico?", min: 400, rows: 6 },
+  { k: "caso", lab: "2. Caso que analizarás", sel: true },
+  { k: "hechos", lab: "2.1 Hechos relevantes del caso (¿qué pasó?, ¿quiénes participan?, ¿qué está en riesgo?)", min: 200, rows: 4 },
+  { k: "principios", lab: "2.2 Principios bioéticos y valores en juego", min: 150, rows: 3 },
+  { k: "articulos", lab: "2.3 Artículos del Código de Ética aplicables y por qué", min: 120, rows: 3, tip: /art/i },
+  { k: "decision", lab: "2.4 Decisión fundamentada: ¿qué harías y por qué es lo correcto?", min: 300, rows: 5 },
+  { k: "c1", lab: "3. Compromiso ético 1", min: 40, rows: 2 }, { k: "c2", lab: "Compromiso ético 2", min: 40, rows: 2 }, { k: "c3", lab: "Compromiso ético 3", min: 40, rows: 2 },
+  { k: "conclusion", lab: "4. Conclusión", min: 300, rows: 5 },
+];
+function renderWork() {
+  KEYH = null; header(); window.scrollTo(0, 0);
+  const w = S.work; if (!w.titulo) w.titulo = WF[0].def;
+  const sts = stations();
+  $("#app").innerHTML = `<div class="card" style="max-width:900px;margin:0 auto">
+    <p class="pill">Cierre · trabajo individual</p><h1 style="margin-top:8px">Tu trabajo final</h1>
+    <p class="muted">Integra lo que viviste en el turno. Escribe con tus propias palabras: tus respuestas de las estaciones se incluirán como anexo.</p>
+    ${WF.map((f) => f.sel ? `<label class="field" data-w="caso"><span>${f.lab}</span><select id="w_caso"><option value="">Elige una estación…</option>${sts.map((st, i) => `<option value="${i}" ${w.caso === String(i) ? "selected" : ""}>Estación ${i + 1}: ${esc(st.title)}</option>`).join("")}</select><p class="err"></p></label><div id="casoScene" class="scene" ${w.caso ? "" : "hidden"}>${w.caso ? esc(sts[+w.caso].scene) : ""}</div>`
+      : `<label class="field" data-w="${f.k}"><span>${f.lab}</span>${f.rows === 1 ? `<input id="w_${f.k}" value="${esc(w[f.k] || "")}" maxlength="140">` : `<textarea id="w_${f.k}" rows="${f.rows}">${esc(w[f.k] || "")}</textarea>`}<div class="counter" id="wc_${f.k}"></div><p class="err"></p></label>`).join("")}
+    <div class="row between"><button class="btn ghost" id="wb">← Turno</button><button class="btn big" id="wg">Revisar y generar mi PDF →</button></div></div>`;
+  const cnt = (f) => { const el = $("#wc_" + f.k); if (el) el.textContent = `${(w[f.k] || "").trim().length} / mínimo ${f.min}`; };
+  WF.forEach((f) => { const el = $("#w_" + f.k); el.addEventListener("input", () => { w[f.k] = el.value; save(); cnt(f); const fw = el.closest("[data-w]"); fw.classList.remove("invalid"); fw.querySelector(".err").textContent = ""; if (f.k === "caso") { const sc = $("#casoScene"); sc.hidden = !el.value; sc.textContent = el.value ? sts[+el.value].scene : ""; } }); el.addEventListener("change", () => { w[f.k] = el.value; save(); }); cnt(f); });
+  $("#wb").onclick = renderMap;
+  $("#wg").onclick = () => {
+    for (const f of WF) {
+      const v = (w[f.k] || "").trim(), bad = f.sel ? !v : v.length < f.min || (f.tip && !f.tip.test(v));
+      if (bad) { const fw = $(`[data-w="${f.k}"]`); fw.classList.add("invalid"); fw.querySelector(".err").textContent = f.sel ? "Elige el caso que analizarás." : f.tip && v.length >= f.min ? "Cita al menos un artículo (por ejemplo, «art. 24»)." : `Desarrolla un poco más (${v.length} de ${f.min} caracteres como mínimo).`; const el = $("#w_" + f.k); el.focus(); el.scrollIntoView({ block: "center", behavior: "smooth" }); return; }
+    }
+    S.workDone = true; if (!S.end) S.end = Date.now(); log("Completa el trabajo final"); save(); renderFinal();
+  };
+}
+function summary() {
+  const sts = stations(), rows = sts.map((st, i) => ({ st, s: score(S.res[i]), r: S.res[i] }));
+  const n = rows.reduce((a, x) => a + x.s.n, 0), f = rows.reduce((a, x) => a + x.s.first, 0);
+  const payload = JSON.stringify({ n: norm(S.name), c: S.code, s: S.start, e: S.end, r: rows.map((x) => [x.s.first, x.s.err]), w: Object.values(S.work).join("|").length });
+  const h = hashStr(payload).toString(16).toUpperCase().padStart(8, "0"), h2 = hashStr(payload + "#E").toString(16).toUpperCase().padStart(8, "0");
+  return { rows, n, f, pct: n ? Math.round(f / n * 100) : 0, code: `ETL-${h.slice(0, 4)}-${h.slice(4)}-${h2.slice(0, 4)}`, dur: fmtDur((S.end || Date.now()) - S.start) };
+}
+function renderFinal() {
+  KEYH = null; header(); window.scrollTo(0, 0);
+  const sm = summary();
+  $("#app").innerHTML = `<div class="card" style="max-width:900px;margin:0 auto"><div style="text-align:center"><div style="font-size:50px">🎓</div><h1>¡Trabajo completo!</h1><p class="muted">${esc(S.name)} · ${esc(S.code)}</p><p><span class="pill ok">${sm.f} de ${sm.n} logros al primer intento (${sm.pct} %)</span> <span class="pill">Tiempo: ${sm.dur}</span></p></div>
+    <table class="sum"><thead><tr><th>Estación</th><th>Primer intento</th><th>Retroalimentaciones</th></tr></thead><tbody>${sm.rows.map((x, i) => `<tr><td>${x.st.icon} ${i + 1}. ${esc(x.st.title)}</td><td>${x.s.first}/${x.s.n}</td><td>${x.s.err}</td></tr>`).join("")}</tbody></table>
+    <div class="row" style="justify-content:center;margin-top:18px"><button class="btn big" id="pdf">⬇ Descargar mi trabajo en PDF</button><button class="btn ghost" id="edit">Editar el trabajo</button></div>
+    <p class="small muted" style="text-align:center">Código de verificación: <b>${sm.code}</b>. Sube el PDF a la tarea del aula virtual.</p><div class="feedback" id="fb"></div></div>`;
+  $("#edit").onclick = renderWork;
+  $("#pdf").onclick = async () => {
+    const fn = `Trabajo_Etica_${norm(S.name).replace(/[^a-z0-9]+/g, "_")}_${S.code.replace(/[^\w-]/g, "")}.pdf`;
+    const blob = makePDF(sm), r = await saveFile(fn, blob);
+    const f = $("#fb"); f.className = "feedback " + (r === "declined" ? "info" : "ok"); f.innerHTML = r === "declined" ? `<span class="ft">Descarga cancelada</span>Puedes volver a intentarlo.` : `<span class="ft">PDF generado</span>${esc(fn)}. Súbelo a la tarea del aula virtual.`;
+    log("Descarga el PDF del trabajo");
+  };
+}
+async function saveFile(name, blob) {
+  if (window.claude && typeof window.claude.use === "function") {
+    try { const d = await Promise.race([window.claude.use("downloads"), new Promise((r) => setTimeout(() => r(null), 6000))]); if (d) { await d.save({ filename: name, data: blob }); return "saved"; } }
+    catch (e) { if (e && e.code === "declined") return "declined"; }
+  }
+  const url = URL.createObjectURL(blob), a = document.createElement("a"); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 10000); return "fallback";
+}
+
+// ═════ PDF sin dependencias (Helvetica, WinAnsi)
+const pdfEnc = (v) => { const w = { "€": 128, "‚": 130, "„": 132, "…": 133, "‘": 145, "’": 146, "“": 147, "”": 148, "•": 149, "–": 150, "—": 151 }; return Array.from(String(v).normalize("NFC").replace(/[✓☑]/g, "OK").replace(/[✗☐]/g, "-").replace(/↺/g, "(R)").replace(/→/g, "->").replace(/≥/g, ">=").replace(/≤/g, "<=").replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}️]/gu, ""), (c) => { const p = c.codePointAt(0); return (w[c] ?? (p <= 255 ? p : 63)).toString(16).padStart(2, "0"); }).join(""); };
+function wrap(v, width, size) {
+  const k = size / 10, gl = (ch) => { const b = ch.normalize("NFD")[0] || ""; if (/[ilIjtf.,:;!'|()\[\]]/.test(b)) return 3.4 * k; if (/[mwMW@%&]/.test(b)) return 9 * k; if (/[A-Z]/.test(b)) return 7 * k; if (b === " ") return 2.9 * k; return 5.7 * k; };
+  const wOf = (s) => Array.from(s).reduce((t, c) => t + gl(c), 0);
+  return String(v).split(/\r?\n/).flatMap((p) => { const out = []; let line = ""; for (const word of p.split(/\s+/).filter(Boolean)) { const c = line ? line + " " + word : word; if (wOf(c) <= width) { line = c; continue; } if (line) out.push(line); line = word; while (wOf(line) > width) { let cut = line.length - 1; while (cut > 1 && wOf(line.slice(0, cut)) > width) cut--; out.push(line.slice(0, cut)); line = line.slice(cut); } } out.push(line); return out; });
+}
+function makePDF(sm) {
+  const pages = []; let ct, y;
+  const T = (v, x, yy, size = 10.5, bold = false, col = "0.11 0.1 0.2") => ct.push(`${col} rg BT /F${bold ? 2 : 1} ${size} Tf 1 0 0 1 ${x} ${yy} Tm <${pdfEnc(v)}> Tj ET\n`);
+  const R = (x, yy, w, h, col) => ct.push(`${col} rg ${x} ${yy} ${w} ${h} re f\n`);
+  const L = (x1, y1, x2, y2, col = "0.3 0.27 0.71", w = 0.8) => ct.push(`${col} RG ${w} w ${x1} ${y1} m ${x2} ${y2} l S\n`);
+  const page = () => { ct = []; pages.push(ct); y = 790; };
+  const need = (h) => { if (y - h < 64) { page(); } };
+  const P = (t, o = {}) => { const size = o.size || 10.5, ind = o.ind || 0, lh = size * 1.45; for (const ln of wrap(t, 499 - ind, size)) { need(lh); T(ln, 48 + ind, y, size, o.bold, o.col); y -= lh; } y -= o.gap ?? 4; };
+  const H = (t, lvl = 1) => { need(40); y -= lvl === 1 ? 8 : 4; T(t, 48, y, lvl === 1 ? 14 : 11.5, true, "0.18 0.16 0.43"); y -= lvl === 1 ? 8 : 4; if (lvl === 1) { L(48, y, 547, y); } y -= lvl === 1 ? 14 : 12; };
+  const w = S.work, sts = stations();
+  // portada
+  page();
+  R(0, 742, 595, 100, "0.176 0.165 0.431");
+  T(CONFIG.institucion.toUpperCase(), 48, 800, 11, true, "1 1 1"); T(`${CONFIG.curso} (${CONFIG.codigoCurso})`, 48, 780, 11, false, "0.88 0.87 0.98"); T("Trabajo individual de cierre", 48, 760, 11, false, "0.88 0.87 0.98");
+  y = 640; for (const ln of wrap(w.titulo, 480, 22)) { T(ln, 58, y, 22, true, "0.18 0.16 0.43"); y -= 30; }
+  y -= 10; T("Simulación ética: un turno en el Hospital Santa Rosa (escenario ficticio)", 58, y, 11.5, false, "0.36 0.35 0.46");
+  y = 430; [["Estudiante", S.name], ["Código", S.code], ["Docente", CONFIG.docente], ["Fecha", new Date(S.end || Date.now()).toLocaleDateString("es-PE")], ["Tiempo de trabajo", sm.dur], ["Código de verificación", sm.code]].forEach(([a, b]) => { T(a, 58, y, 10.5, true); T(b, 210, y, 10.5); y -= 22; });
+  // cuerpo
+  page();
+  H("1. Introducción"); P(w.intro);
+  const cs = sts[+w.caso];
+  H(`2. Análisis de caso: ${cs.title}`); P(`Escena: ${cs.scene}`, { size: 9.5, col: "0.36 0.35 0.46", gap: 8 });
+  H("2.1 Hechos relevantes", 2); P(w.hechos); H("2.2 Principios bioéticos y valores en juego", 2); P(w.principios);
+  H("2.3 Artículos del Código de Ética aplicables", 2); P(w.articulos); H("2.4 Decisión fundamentada", 2); P(w.decision);
+  H("3. Compromisos éticos"); [w.c1, w.c2, w.c3].forEach((c, i) => P(`${i + 1}. ${c}`, { ind: 6 }));
+  H("4. Conclusión"); P(w.conclusion);
+  H("Referencias");
+  ["Colegio de Tecnólogos Médicos del Perú. (2026). Código de ética profesional del Colegio de Tecnólogos Médicos del Perú (versión del 12 de agosto de 2026).",
+    "Congreso de la República del Perú. (2009). Ley N.º 29414, Ley que establece los derechos de las personas usuarias de los servicios de salud.",
+    "Congreso de la República del Perú. Ley N.º 28456, Ley del Trabajo del Profesional de la Salud Tecnólogo Médico, y su reglamento (Decreto Supremo N.º 012-2008-SA).",
+    "Hincapié, D. (2021). Deontología profesional en salud, para algunos, no para todos. Revista Misión Jurídica, 14(21), 211–224. https://doi.org/10.25058/1794600X.1957",
+    "Morales, J., Nava, G., Esquivel, J., & Díaz, L. (2011). Principios de ética, bioética y conocimiento del hombre. Editorial Universitaria UAEH.",
+    "Organización de las Naciones Unidas. (1948). Declaración Universal de los Derechos Humanos.",
+    "Sánchez, M. (2021). Bioética en ciencias de la salud (2.ª ed.). Elsevier."].forEach((r) => P(r, { size: 9.5, ind: 0 }));
+  // anexo
+  page(); H("Anexo A. Registro de la simulación");
+  P(`Logros al primer intento: ${sm.f} de ${sm.n} (${sm.pct} %). Inicio: ${new Date(S.start).toLocaleString("es-PE")}. Tiempo total: ${sm.dur}.`, { gap: 8 });
+  sts.forEach((st, i) => {
+    const r = S.res[i], s = score(r); H(`Estación ${i + 1}. ${st.title} (${st.unit})`, 2);
+    st.steps.forEach((stp, j) => { const x = r && r.steps[j]; P(`${x && x.ok ? (x.err ? "(R)" : "OK") : "-"}  ${stp.check}${x && x.ok ? (x.err ? ` · logrado tras ${x.err} retroalimentación(es)` : " · al primer intento") : " · pendiente"}`, { size: 9.5, ind: 6, gap: 1 }); });
+    y -= 4;
+  });
+  H("Anexo B. Respuestas escritas durante la simulación");
+  sts.forEach((st, i) => st.steps.forEach((stp, j) => { if (stp.type !== "write") return; const x = S.res[i] && S.res[i].steps[j]; P(`Estación ${i + 1}: ${strip(stp.prompt)}`, { bold: true, size: 9.5, gap: 2 }); P(x && x.val ? x.val : "(sin respuesta)", { size: 10, ind: 8, gap: 8 }); }));
+  H("Anexo C. Bitácora");
+  S.log.forEach((l) => P(`${fmtT(l.t)}  ${l.m}`, { size: 8.5, col: "0.36 0.35 0.46", gap: 0 }));
+  pages.forEach((pg, i) => { ct = pg; if (i > 0) { T(`${S.name} · ${S.code}`, 48, 34, 8.5, false, "0.36 0.35 0.46"); T(`${CONFIG.curso} · ${sm.code}`, 260, 34, 8.5, false, "0.36 0.35 0.46"); } T(`${i + 1}/${pages.length}`, 530, 34, 8.5, true); });
+  const objs = ["<< /Type /Catalog /Pages 2 0 R >>", `<< /Type /Pages /Count ${pages.length} /Kids [${pages.map((_, i) => `${5 + i * 2} 0 R`).join(" ")}] >>`, "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>", "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>"];
+  pages.forEach((pg, i) => { const s = pg.join(""); objs.push(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents ${6 + i * 2} 0 R >>`); objs.push(`<< /Length ${s.length} >>\nstream\n${s}endstream`); });
+  let pdf = "%PDF-1.4\n"; const off = [];
+  objs.forEach((o, i) => { off.push(pdf.length); pdf += `${i + 1} 0 obj\n${o}\nendobj\n`; });
+  const x = pdf.length; pdf += `xref\n0 ${objs.length + 1}\n0000000000 65535 f \n${off.map((o) => String(o).padStart(10, "0") + " 00000 n \n").join("")}trailer\n<< /Size ${objs.length + 1} /Root 1 0 R /Info << /Title (Trabajo de etica) /Author (${S.code.replace(/[()\\]/g, "")}) >> >>\nstartxref\n${x}\n%%EOF\n`;
+  return new Blob([pdf], { type: "application/pdf" });
+}
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeOv(); if (e.key === "Enter" && !/TEXTAREA|INPUT|SELECT/.test(document.activeElement.tagName)) { const n = $("#next"); if (n && !n.hidden) { e.preventDefault(); n.click(); } } });
+(function () { const s = load(); if (s && s.workDone) { S = s; ST = null; renderFinal(); } else renderHome(); })();
+
+</script>
+</body>
+</html>
